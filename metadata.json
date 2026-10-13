@@ -1,0 +1,10 @@
+{
+  "name": "AuraFit - Fuerza & Coach IA",
+  "description": "App de entrenamiento de fuerza con asistente de voz Gemini en tiempo real, registro inteligente de series y sincronización.",
+  "requestFramePermissions": [
+    "microphone"
+  ],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}

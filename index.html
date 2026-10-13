@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>AuraFit - Fuerza & Coach IA</title>
+    <meta name="description" content="App de entrenamiento de fuerza con asistente de voz Gemini en tiempo real, registro inteligente de series y sincronización." />
+    <meta property="og:title" content="AuraFit - Fuerza & Coach IA" />
+    <meta property="og:description" content="App de entrenamiento de fuerza con asistente de voz Gemini en tiempo real, registro inteligente de series y sincronización." />
+    <meta property="og:type" content="website" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="theme-color" content="#090d16" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="apple-mobile-web-app-title" content="AuraFit" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <link rel="icon" type="image/svg+xml" href="/icon.svg" />
+    <script>
+      // Gracefully handle Vite HMR WebSocket disconnection errors in Cloud Run / proxy preview environment
+      window.addEventListener(
+        'error',
+        function (event) {
+          if (
+            event?.message?.includes('WebSocket') ||
+            (typeof event?.filename === 'string' && event.filename.includes('@vite/client')) ||
+            (event?.error && typeof event.error.message === 'string' && event.error.message.includes('WebSocket'))
+          ) {
+            event.stopImmediatePropagation();
+            event.preventDefault();
+            return true;
+          }
+        },
+        true
+      );
+      window.addEventListener('unhandledrejection', function (event) {
+        if (
+          event?.reason?.message?.includes('WebSocket') ||
+          (typeof event?.reason === 'string' && event.reason.includes('WebSocket'))
+        ) {
+          event.stopImmediatePropagation();
+          event.preventDefault();
+        }
+      });
+    </script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>
+

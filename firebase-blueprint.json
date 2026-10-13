@@ -1,0 +1,114 @@
+{
+  "entities": {
+    "AthleteProfile": {
+      "title": "AthleteProfile",
+      "description": "Perfil integral del atleta con biometría, metabolismo Mifflin-St Jeor y macronutrientes",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string", "maxLength": 128 },
+        "age": { "type": "number" },
+        "gender": { "type": "string", "enum": ["hombre", "mujer"] },
+        "weightKg": { "type": "number" },
+        "heightCm": { "type": "number" },
+        "bodyFatPercent": { "type": "number" },
+        "experienceLevel": { "type": "string", "enum": ["principiante", "intermedio", "avanzado"] },
+        "activityLevel": { "type": "string", "enum": ["sedentario", "ligero", "moderado", "activo", "muy_activo"] },
+        "primaryGoal": { "type": "string", "enum": ["volumen", "definicion", "recomposicion"] },
+        "bmr": { "type": "number" },
+        "tdee": { "type": "number" },
+        "proteinGrams": { "type": "number" },
+        "targetCalories": { "type": "number" },
+        "updatedAt": { "type": "string" }
+      },
+      "required": ["userId", "age", "gender", "weightKg", "heightCm", "experienceLevel"]
+    },
+    "CustomRoutine": {
+      "title": "CustomRoutine",
+      "description": "Plantilla de rutina personalizada o generada por Gemini con principios científicos",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string", "maxLength": 128 },
+        "name": { "type": "string", "maxLength": 128 },
+        "goal": { "type": "string", "maxLength": 64 },
+        "splitType": { "type": "string", "maxLength": 64 },
+        "weeklyFrequency": { "type": "number" },
+        "scientificRationale": { "type": "string", "maxLength": 1000 },
+        "exercises": { "type": "array" },
+        "createdAt": { "type": "string" }
+      },
+      "required": ["userId", "name", "goal", "exercises"]
+    },
+    "Workout": {
+      "title": "Workout",
+      "description": "Sesión de entrenamiento de fuerza completada",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string", "maxLength": 128 },
+        "title": { "type": "string", "maxLength": 128 },
+        "routineType": { "type": "string", "maxLength": 64 },
+        "date": { "type": "string", "maxLength": 64 },
+        "durationMinutes": { "type": "number" },
+        "totalVolumeKg": { "type": "number" },
+        "notes": { "type": "string", "maxLength": 1000 },
+        "exercises": { "type": "array" },
+        "createdAt": { "type": "string" }
+      },
+      "required": ["userId", "title", "routineType", "date", "exercises"]
+    },
+    "BodyMetric": {
+      "title": "BodyMetric",
+      "description": "Registro de progreso corporal y medidas antropométricas",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string", "maxLength": 128 },
+        "date": { "type": "string", "maxLength": 64 },
+        "weightKg": { "type": "number" },
+        "chestCm": { "type": "number" },
+        "waistCm": { "type": "number" },
+        "hipsCm": { "type": "number" },
+        "bicepCm": { "type": "number" },
+        "thighCm": { "type": "number" },
+        "notes": { "type": "string", "maxLength": 500 },
+        "createdAt": { "type": "string" }
+      },
+      "required": ["userId", "date", "weightKg"]
+    },
+    "ScheduledSession": {
+      "title": "ScheduledSession",
+      "description": "Sesión de entrenamiento agendada",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string", "maxLength": 128 },
+        "title": { "type": "string", "maxLength": 128 },
+        "routineType": { "type": "string", "maxLength": 64 },
+        "scheduledAt": { "type": "string", "maxLength": 64 },
+        "calendarEventId": { "type": "string", "maxLength": 256 },
+        "status": { "type": "string", "enum": ["pendiente", "completada", "cancelada"] },
+        "createdAt": { "type": "string" }
+      },
+      "required": ["userId", "title", "routineType", "scheduledAt"]
+    }
+  },
+  "firestore": {
+    "/users/{userId}/profile/{profileId}": {
+      "schema": "AthleteProfile",
+      "description": "Perfil y requerimientos metabólicos del atleta"
+    },
+    "/users/{userId}/customRoutines/{routineId}": {
+      "schema": "CustomRoutine",
+      "description": "Rutinas personalizadas generadas por Gemini y el usuario"
+    },
+    "/users/{userId}/workouts/{workoutId}": {
+      "schema": "Workout",
+      "description": "Sesiones de entrenamiento del usuario"
+    },
+    "/users/{userId}/metrics/{metricId}": {
+      "schema": "BodyMetric",
+      "description": "Registros de medidas corporales y peso"
+    },
+    "/users/{userId}/scheduled/{sessionId}": {
+      "schema": "ScheduledSession",
+      "description": "Sesiones agendadas en calendario"
+    }
+  }
+}

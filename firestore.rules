@@ -1,0 +1,80 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Global default deny
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isOwner(userId) {
+      return isSignedIn() && request.auth.uid == userId;
+    }
+
+    function isValidId(id) {
+      return id is string && id.size() > 0 && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$');
+    }
+
+    function incoming() {
+      return request.resource.data;
+    }
+
+    match /users/{userId} {
+      allow get: if isOwner(userId);
+      allow list: if false;
+      allow create, update: if isOwner(userId) && isValidId(userId)
+        && incoming().userId == userId;
+      allow delete: if isOwner(userId);
+
+      match /profile/{profileId} {
+        allow get, list: if isOwner(userId);
+        allow create, update: if isOwner(userId) && isValidId(profileId)
+          && incoming().userId == userId;
+        allow delete: if isOwner(userId);
+      }
+
+      match /profileHistory/{historyId} {
+        allow get, list: if isOwner(userId);
+        allow create, update: if isOwner(userId) && isValidId(historyId)
+          && incoming().userId == userId;
+        allow delete: if isOwner(userId);
+      }
+
+      match /customRoutines/{routineId} {
+        allow get, list: if isOwner(userId);
+        allow create, update: if isOwner(userId) && isValidId(routineId)
+          && incoming().userId == userId;
+        allow delete: if isOwner(userId);
+      }
+
+      match /workouts/{workoutId} {
+        allow get, list: if isOwner(userId);
+        allow create: if isOwner(userId) && isValidId(workoutId)
+          && incoming().userId == userId
+          && incoming().title is string && incoming().title.size() <= 128
+          && incoming().routineType is string && incoming().routineType.size() <= 64
+          && incoming().exercises is list;
+        allow update: if isOwner(userId) && isValidId(workoutId)
+          && incoming().userId == userId;
+        allow delete: if isOwner(userId);
+      }
+
+      match /metrics/{metricId} {
+        allow get, list: if isOwner(userId);
+        allow create, update: if isOwner(userId) && isValidId(metricId)
+          && incoming().userId == userId;
+        allow delete: if isOwner(userId);
+      }
+
+      match /scheduled/{sessionId} {
+        allow get, list: if isOwner(userId);
+        allow create, update: if isOwner(userId) && isValidId(sessionId)
+          && incoming().userId == userId;
+        allow delete: if isOwner(userId);
+      }
+    }
+  }
+}
